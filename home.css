@@ -5,8 +5,8 @@
 }
 
 p{
-  color:gray;
-  font-size:13px;
+  color: gray;
+  font-size: 13px;
 }
 
 .topnav {
@@ -177,7 +177,7 @@ p{
     padding: 20px 30px;
     gap: 10px;
     width: 100%;
-    margin-top: 0px;
+    margin: 0px;
     height: 100vh;
   }
 }
@@ -187,10 +187,6 @@ p{
 
 .text-container div{
   text-align: center;
-}
-
-.text-container h1{
-  font-weight:normal;
 }
 
 .text-container button{
@@ -252,7 +248,7 @@ p{
 
   .text-container h1{
     color: white;
-    font-weight: normal;
+    font-weight: 100;
     text-align: center;
   }
 
@@ -279,7 +275,7 @@ p{
   }
 
   .welcome h1{
-    font-weight: lighter;
+    font-weight: 100;
   }
 
 
@@ -307,7 +303,7 @@ p{
  
 
   .split1left h1,.split1right h1{
-    font-weight: lighter;
+    font-weight: 100;
   }
   
   @media screen and (max-width:992px){
@@ -361,7 +357,7 @@ p{
   }
   
   .stat h2 {
-    font-size: 24px;
+    font-size:18px;
     margin-bottom: 10px;
   }
   
