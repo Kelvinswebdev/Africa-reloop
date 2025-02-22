@@ -144,18 +144,18 @@
 
     <div class="abright">
         <div class="container">
-            <form id="submit-form" enctype="multipart/form-data">
+                       <form id="uploadForm" enctype="multipart/form-data">
                 <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required><br><br>
           
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" required><br><br>
           
                 <label for="affiliation">Affiliation/Organization:</label>
-                <input type="text" id="affiliation" name="affiliation" required>
+                <input type="text" id="affiliation" name="affiliation" required><br><br>
           
                 <label for="title">Abstract Title:</label>
-                <input type="text" id="title" name="title" required>
+                <input type="text" id="title" name="title" required><br><br>
           
                 <label for="category">Category:</label>
                 <select id="category" name="category" required>
@@ -163,16 +163,16 @@
                     <option value="Sustainable Materials">Industry-Specific Recycling Approaches</option>
                     <option value="Waste Management">Waste-to-Energy and Resource Recovery</option>
                     <option value="Circular Economy">Regional and Global Collaboration</option>
-                </select>
+                </select><br><br>
           
                 <label for="abstract">Abstract (Max 300 words):</label>
-                <textarea id="abstract" name="abstract" rows="5" maxlength="300" required></textarea>
+                <textarea id="abstract" name="abstract" rows="5" maxlength="300" required></textarea><br><br>
           
                 <label for="file">Upload Abstract (PDF/DOCX):</label>
-                <input type="file" id="file" name="file" accept=".pdf,.doc,.docx" required>
+                <input type="file" id="file" name="file" accept=".pdf,.doc,.docx" required><br><br>
           
-                <button type="button" onclick="submitForm()">Submit Abstract</button>
-              </form>
+                <button type="submit">Submit Abstract</button>
+            </form>
           
               <div id="output"></div>
             
@@ -200,53 +200,55 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
-    function submitForm() {
-        var fileInput = document.getElementById("file").files[0];
-        if (!fileInput) {
-            alert("Please select a file");
-            return;
-        }
+    document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-        var reader = new FileReader();
-        reader.readAsDataURL(fileInput);
-        reader.onload = function () {
-            var fileData = reader.result.split(',')[1];
+    let fileInput = document.getElementById('file').files[0];
+    let reader = new FileReader();
 
-            var formData = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                affiliation: document.getElementById("affiliation").value,
-                title: document.getElementById("title").value,
-                category: document.getElementById("category").value,
-                abstract: document.getElementById("abstract").value,
-                file: Utilities.newBlob(Utilities.base64Decode(fileData), fileInput.type, fileInput.name)
-            };
-
-            google.script.run.withSuccessHandler(function (response) {
-                if (response.success) {
-                    document.getElementById("output").innerHTML = `✅ ${response.message}<br> <a href="${response.link}" target="_blank">Download File</a>`;
-                } else {
-                    document.getElementById("output").innerHTML = `❌ Error: ${response.message}`;
-                }
-            }).uploadFileAndSaveData(formData);
-        };
+    reader.onload = async function() {
+    let formData = new FormData();
+    formData.append('name', document.getElementById('name').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('title', document.getElementById('title').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('category', document.getElementById('category').value);
+    formData.append('abstract', document.getElementById('abstract').value);
+    formData.append('file', reader.result.split(',')[1]); // Base64 encoded file
+    formData.append('filename', fileInput.name);
+    formData.append('mimetype', fileInput.type);
+    
+    try {
+        let response = await fetch("https://script.google.com/macros/s/AKfycbz-arAHhC-kg0YyrbS8ypNi0SM3YomQm695ysg2JyenQGl0VsRN3YVozttUAImL_Ku-0g/exec", {
+            method: 'POST',
+            body: formData
+        });
+        let result = await response.json();
+        alert(result.message);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the form.');
     }
-  </script>
+};
+
+reader.readAsDataURL(fileInput);
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
 
